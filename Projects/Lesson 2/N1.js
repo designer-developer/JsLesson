@@ -24,7 +24,7 @@ for (let i = 0; i < 2; i++) {
         appData.expenses[a] = b
     } else {
         i = i - 1;
-        console.log("Ошибка, не заполненны поля");
+        console.log("Ошибка, не заполнены поля");
     }
 };
 
