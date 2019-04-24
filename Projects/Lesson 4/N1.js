@@ -89,12 +89,9 @@ let appData = {
                 --i;
                 console.log("Ошибка, не заполненны поля");
             };
-
-        };
-        
-        
+        }
+     
     }
-
 };
 
     for (let key in appData) {
