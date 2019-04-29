@@ -25,7 +25,7 @@ let start1 = document.querySelector("#start"), // Кнопка "Начать р�
     checkSavings = document.querySelector('#savings'),
     monthSavingValue = document.getElementsByClassName('monthsavings-value')[0],
     yearSavingValue = document.getElementsByClassName('yearsavings-value')[0];
-    
+
 
 confirm.setAttribute("disabled", true);
 confirm1.setAttribute("disabled", true);
@@ -62,7 +62,7 @@ start1.addEventListener('click', function () {
 
 confirm.addEventListener('click', function () {
     let sum = 0;
-        
+
 
     for (let i = 0; i < expensesItem.length; i++) {
         let a = expensesItem[i].value,
@@ -80,7 +80,7 @@ confirm.addEventListener('click', function () {
     }
     expensesValue.textContent = sum;
 
-   appData.optionalExpenses = (appData.budget - sum) / 30;
+
 
 });
 
@@ -93,24 +93,30 @@ confirm1.addEventListener('click', function () {
 });
 
 calculate.addEventListener('click', function () {
+    let sum = 0;
+    for (let i = 0; i < expensesItem.length; i++) {
 
-    if (appData.budget != undefined) {
-        appData.moneyPerDay = (appData.budget / 30).toFixed();
-        dayBudgetValue.textContent = appData.moneyPerDay;
+        let a = expensesItem[i].value,
+            b = expensesItem[++i].value;
+        appData.expenses[a] = b;
+        sum += +b;
+        if (appData.budget != undefined) {
+            appData.moneyPerDay = ((appData.budget - sum) / 30).toFixed();
+            dayBudgetValue.textContent = appData.moneyPerDay;
 
-        if (appData.moneyPerDay < 100) {
-            levelValue.textContent = "Минимальный уровень достатка";
-        } else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
-            levelValue.textContent = "Средний уровень достатка";
-        } else if (appData.moneyPerDay > 2000) {
-            levelValue.textContent = "Высокий уровень достатка";
+            if (appData.moneyPerDay < 100) {
+                levelValue.textContent = "Минимальный уровень достатка";
+            } else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
+                levelValue.textContent = "Средний уровень достатка";
+            } else if (appData.moneyPerDay > 2000) {
+                levelValue.textContent = "Высокий уровень достатка";
+            } else {
+                levelValue.textContent = "Произошла ошибка";
+            }
         } else {
-            levelValue.textContent = "Произошла ошибка";
+            dayBudgetValue.textContent = "Произошла ошибка";
         }
-    } else {
-        dayBudgetValue.textContent = "Произошла ошибка";
     }
-
 });
 
 incomeItem.addEventListener('input', function () {
