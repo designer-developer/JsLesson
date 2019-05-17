@@ -129,55 +129,75 @@ window.addEventListener("DOMContentLoaded", function () {
 
     // Form
 
-    let message = {
+      let message = {
         loading: "Загрузка...",
         success: "Спасибо! Скоро мы с вами свяжемся",
         failure: "Что-то пошло не так"
     };
 
-    let form = document.querySelector('.main-form'),
-        input = document.getElementsByTagName('input'),
-        statusMessage = document.createElement('div');
-        
-    statusMessage.classList.add('status');
+    function callForm(cb) {
+
+        let form = document.querySelector(cb),
+            input = document.getElementsByTagName('input'),
+            statusMessage = document.createElement('div');
+
+        statusMessage.classList.add('status');
 
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault(); // Запрещаем браузеру обновляться после отправки формы
-        form.appendChild(statusMessage);
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Запрещаем браузеру обновляться после отправки формы
+            form.appendChild(statusMessage);
 
-        let request = new XMLHttpRequest();
-        request.open('POST', 'server.php');
-        request.setRequestHeader('Content-Type', 'applicatoin/x-www-form-urlencoded')
+            let request = new XMLHttpRequest();
+            request.open('POST', 'server.php');
+            request.setRequestHeader('Content-Type', 'applicatoin/x-www-form-urlencoded')
 
-        let formData = new FormData(form);
-        request.send(formData);
+            let formData = new FormData(form);
+            request.send(formData);
 
-        request.addEventListener('readystatechange', function () {
-            if (request.readyState < 4) {
-                statusMessage.innerHTML = message.loading;
-            } else if (request.readyState === 4 && request.status == 200) {
-                statusMessage.innerHTML = message.success
-            } else {
-                statusMessage.innerHTML = message.failure;
+            request.addEventListener('readystatechange', function () {
+                if (request.readyState < 4) {
+                    statusMessage.innerHTML = message.loading;
+                } else if (request.readyState === 4 && request.status == 200) {
+                    statusMessage.innerHTML = message.success
+                } else {
+                    statusMessage.innerHTML = message.failure;
+                }
+            });
+
+            for (let i = 0; i < input.length; i++) {
+                input[i].value = '';
             }
-        });
 
-        for (let i = 0; i < input.length; i++) {
-            input[i].value = '';
-        };
-
-        input.forEach(function(item){
-            item.addEventListener('input', function(e){
-                if (e.data.search(/[0-9\+]/)){
-                    this.value = "";
+            close.addEventListener("click", () => {
+                if (form.contains(statusMessage)) {
+                    form.removeChild(statusMessage);
                 }
             });
         });
 
+    }
+    callForm('.main-form');
+    callForm('#form');
 
+    function phoneNumber() {
+        let placeholder = "+7 (___) ___ __ __",
+            i = 0,
+            inp1 = placeholder.replace(/\D/g, ""),
+            ipn2 = this.value.replace(/\D/g, "");
+
+        if (inp1.length >= inp2.length) {
+            inp1 = inp2;
+        }
+
+        this.value = placeholder.replace(/./g, (a) => {
+            return /[_\d]/.test(a) && i < ipn2.length ? ipn2.charAt(i++) : i >= ipn2.length ? "" : a;
+        });
+
+    }
+    let input = document.querySelectorAll(".phone-number");
+    input.forEach((item) => {
+        item.addEventListener("input", phoneNumber);
     });
-
-
 
 });
